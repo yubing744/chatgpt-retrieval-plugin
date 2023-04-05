@@ -12,3 +12,7 @@ heroku-push:
 
 heroku-login:
 	heroku container:login
+
+docker-build:
+	docker build -t yubing744/chatgpt-retrieval-plugin:latest .
+	docker tag yubing744/chatgpt-retrieval-plugin:latest yubing744/chatgpt-retrieval-plugin:0.2.0

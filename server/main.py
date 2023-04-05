@@ -3,6 +3,7 @@ from typing import Optional
 import uvicorn
 from fastapi import FastAPI, File, Form, HTTPException, Depends, Body, UploadFile
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from models.api import (
@@ -40,8 +41,16 @@ sub_app = FastAPI(
     servers=[{"url": "https://your-app-url.com"}],
     dependencies=[Depends(validate_token)],
 )
-app.mount("/sub", sub_app)
 
+sub_app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.mount("/sub", sub_app)
 
 @app.post(
     "/upsert-file",
